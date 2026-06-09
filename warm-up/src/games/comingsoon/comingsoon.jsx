@@ -1,20 +1,22 @@
 
+const BASE = import.meta.env.BASE_URL
+
 const IMAGES = [
-    '/kappa fat chungus.png',
-    '/fat kappa 2.png',
-    '/fat kappa chungus 3.png',
-    '/kappa fat chungus.png',
-    '/fat kappa 2.png',
-    '/fat kappa chungus 3.png',
-    '/kappa fat chungus.png',
-    '/fat kappa 2.png',
-    '/fat kappa chungus 3.png',
-    '/kappa fat chungus.png',
-    '/fat kappa 2.png',
-    '/fat kappa chungus 3.png',
-    '/kappa fat chungus.png',
-    '/fat kappa 2.png',
-    '/fat kappa chungus 3.png',
+    `${BASE}kappa fat chungus.png`,
+    `${BASE}fat kappa 2.png`,
+    `${BASE}fat kappa chungus 3.png`,
+    `${BASE}kappa fat chungus.png`,
+    `${BASE}fat kappa 2.png`,
+    `${BASE}fat kappa chungus 3.png`,
+    `${BASE}kappa fat chungus.png`,
+    `${BASE}fat kappa 2.png`,
+    `${BASE}fat kappa chungus 3.png`,
+    `${BASE}kappa fat chungus.png`,
+    `${BASE}fat kappa 2.png`,
+    `${BASE}fat kappa chungus 3.png`,
+    `${BASE}kappa fat chungus.png`,
+    `${BASE}fat kappa 2.png`,
+    `${BASE}fat kappa chungus 3.png`,
 ]
 
 export default function ComingSoon() {

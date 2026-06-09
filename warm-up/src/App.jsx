@@ -6,7 +6,7 @@ import ComingSoon from './games/comingsoon/comingsoon'
 
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/WarmUpGames">
       <Navbar />
       <Routes>
         <Route path="/" element={<Hub />} />
