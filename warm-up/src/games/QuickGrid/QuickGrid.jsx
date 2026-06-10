@@ -20,7 +20,7 @@ function getRandomCells(count, gridSize, exclude = []) {
 
 export default function QuickGrid() {
 
-    const [targetCount, setTargetCount] = useState(1)
+    const [targetCount, setTargetCount] = useState(3)
     const [gridSize, setGridSize] = useState(4)
     const [suddenDeath, setSuddenDeath] = useState(false)
     const [pattern, setPattern] = useState(false)
@@ -85,6 +85,7 @@ export default function QuickGrid() {
 
     useEffect(() => {
         if (!isPlaying) return
+        if (timerDuration === 0) return
         if (timeleft === 0) { endGame(); return }
         const timer = setTimeout(() => setTimeLeft(t => t - 1), 1000)
         return () => clearTimeout(timer)
@@ -111,7 +112,7 @@ export default function QuickGrid() {
         }
     }
 
-    const gameOverTitle = timeleft === 0 ? "Time's up" : 'Game Over'
+    const gameOverTitle = (timeleft === 0 && timerDuration !== 0) ? "Time's up" : 'Game Over'
 
     return (
         <div className="quickgrid-wrapper">
@@ -145,7 +146,7 @@ export default function QuickGrid() {
                             </div>
                             <div className="hud-block">
                                 <span className="hud-label">Time</span>
-                                <span className={`hud-value ${timeleft <= 5 ? 'hud-danger' : ''}`}>{timeleft}s</span>
+                                <span className={`hud-value ${timeleft <= 5 && timerDuration !== 0 ? 'hud-danger' : ''}`}>{timerDuration === 0 ? '∞' : `${timeleft}s`}</span>
                             </div>
                         </div>
 
@@ -159,7 +160,8 @@ export default function QuickGrid() {
                                                 key={cellIndex}
                                                 className={`cell ${isActive ? 'active' : ''}`}
                                                 style={isActive ? { background: cellColor, boxShadow: `0 0 20px ${cellColor}88` } : {}}
-                                                onPointerDown={() => handleCellClick(rowIndex, cellIndex, isActive)}
+                                                onPointerDown={(e) => { if (e.button === 2) return; handleCellClick(rowIndex, cellIndex, isActive) }}
+                                                onContextMenu={(e) => { e.preventDefault(); handleCellClick(rowIndex, cellIndex, isActive) }}
                                             />
                                         )
                                     })}
@@ -172,7 +174,7 @@ export default function QuickGrid() {
                                 {isPlaying ? 'Restart' : 'Start'}
                             </button>
                             {isPlaying && (
-                                <button className="quickgrid-btn-stop" onClick={stopGame}>Stop</button>
+                                <button className="quickgrid-btn-stop" onClick={timerDuration === 0 ? endGame : stopGame}>Stop</button>
                             )}
                         </div>
                     </>
@@ -210,7 +212,7 @@ function ScoreBoard({ scores, setScores }) {
                             <tr key={i} className={i === 0 ? 'scoreboard-top' : ''}>
                                 <td>{i + 1}</td>
                                 <td>{entry.score}</td>
-                                <td>{entry.config.gridSize}x{entry.config.gridSize} · {entry.config.targetCount}t · {entry.config.timerDuration}s</td>
+                                <td>{entry.config.gridSize}x{entry.config.gridSize} · {entry.config.targetCount}t · {entry.config.timerDuration === 0 ? '∞' : `${entry.config.timerDuration}s`}</td>
                             </tr>
                         ))}
                     </tbody>
@@ -219,6 +221,14 @@ function ScoreBoard({ scores, setScores }) {
             {scores.length > 0 && (
                 <button className="scoreboard-clear" onClick={clearScores}>Clear</button>
             )}
+
+            <div className="sidebar-divider" />
+
+            <span className="sidebar-title">Shortcuts</span>
+            <div className="shortcuts-list">
+                <div className="shortcut-row"><kbd>Space</kbd><span>Start / Restart</span></div>
+                <div className="shortcut-row"><kbd>Esc</kbd><span>Stop</span></div>
+            </div>
         </aside>
     )
 }
@@ -288,14 +298,14 @@ function Sidebar({ targetCount, setTargetCount, gridSize, setGridSize, suddenDea
 
             <span className="sidebar-title">Timer</span>
             <div className="sidebar-grid-sizes">
-                {[15, 30, 60].map(t => (
+                {[15, 30, 60, 0].map(t => (
                     <button
                         key={t}
                         className={`size-btn ${timerDuration === t ? 'active' : ''}`}
                         onClick={() => !isPlaying && setTimerDuration(t)}
                         disabled={isPlaying}
                     >
-                        {t}s
+                        {t === 0 ? '∞' : `${t}s`}
                     </button>
                 ))}
             </div>

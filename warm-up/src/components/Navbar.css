@@ -4,8 +4,11 @@
     left: 0;
     right: 0;
     height: 56px;
-    background: #0a0a14;
-    border-bottom: 1px solid #1e1e3a;
+    background: rgba(10, 10, 20, 0.8);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(240, 224, 64, 0.2);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.35);
     display: flex;
     align-items: center;
     padding: 0 32px;
@@ -32,4 +35,24 @@
 .navbar-logo-img {
     height: 32px;
     width: auto;
+}
+
+.navbar-back {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    margin-right: 16px;
+    font-size: 20px;
+    color: #aaa;
+    text-decoration: none;
+    border: 1px solid #333355;
+    border-radius: 6px;
+    transition: color 0.15s, border-color 0.15s;
+}
+
+.navbar-back:hover {
+    color: #fff;
+    border-color: #666;
 }
