@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import './KeyRush.css'
+import { playKeyClick, playWrong, playSuccess, playGameOver, playStart } from '../../sounds'
 
 const KEY_SETS = {
     qwer:  { label: 'QWER',    keys: ['Q', 'W', 'E', 'R'] },
@@ -59,6 +60,7 @@ export default function KeyRush() {
 
     const endGame = () => {
         if (!isPlayingRef.current) return
+        playGameOver()
         isPlayingRef.current = false
         clearTimeout(timeoutRef.current)
         timeoutRef.current = null
@@ -94,6 +96,7 @@ export default function KeyRush() {
     }
 
     const startGame = () => {
+        playStart()
         clearTimeout(timeoutRef.current)
         isPlayingRef.current = true
         const keys = KEY_SETS[keySetRef.current].keys
@@ -145,12 +148,15 @@ export default function KeyRush() {
             if (!expected) return
 
             if (pressed !== expected) {
+                playWrong()
                 endGame()
                 return
             }
 
+            playKeyClick()
             const nextIndex = currentIndexRef.current + 1
             if (nextIndex >= sequenceRef.current.length) {
+                playSuccess()
                 scoreRef.current += 1
                 setScore(s => s + 1)
                 const newSeq = generateSequence(

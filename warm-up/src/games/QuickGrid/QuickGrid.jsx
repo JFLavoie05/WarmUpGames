@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import './QuickGrid.css'
+import { playCorrect, playWrong, playGameOver, playStart } from '../../sounds'
 
 const GRID_SIZES = [3, 4, 5]
 
@@ -37,6 +38,7 @@ export default function QuickGrid() {
     })
 
     const endGame = () => {
+        playGameOver()
         setIsPlaying(false)
         setActiveCells([])
         setGameOver(true)
@@ -63,6 +65,7 @@ export default function QuickGrid() {
     }
 
     const startGame = () => {
+        playStart()
         setScore(0)
         setTimeLeft(timerDuration)
         setIsPlaying(true)
@@ -94,6 +97,7 @@ export default function QuickGrid() {
     const handleCellClick = (rowIndex, cellIndex, isActive) => {
         if (!isPlaying) return
         if (isActive) {
+            playCorrect()
             setScore(s => s + 1)
             const remaining = activeCells.filter(c => !(c.row === rowIndex && c.col === cellIndex))
             if (pattern) {
@@ -107,6 +111,7 @@ export default function QuickGrid() {
                 setActiveCells([...remaining, ...newCell])
             }
         } else {
+            playWrong()
             if (suddenDeath) { endGame(); return }
             if (score > 0) setScore(s => s - 1)
         }

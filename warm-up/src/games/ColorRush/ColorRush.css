@@ -298,6 +298,24 @@
     gap: 8px;
 }
 
+.game-over-delta {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.game-over-delta-better {
+    color: #00e64d;
+}
+
+.game-over-delta-worse {
+    color: #ff4444;
+}
+
+.game-over-delta-new {
+    color: #f0e040;
+}
+
 .game-over-unit {
     font-size: 32px;
     font-weight: 700;

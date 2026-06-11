@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef } from 'react'
 import './ColorRush.css'
+import { playCorrect, playWrong, playGameOver, playStart } from '../../sounds'
 
-const PALETTE = ['#ff2222', '#00aaff', '#ffd700', '#00e64d', '#aa00ff', '#ffffff', '#00ffcc', '#ff3399']
+const PALETTE = ['#ff2222', '#00aaff', '#ffd700', '#00e64d', '#aa00ff', '#ff3399']
 const GRID_SIZES = [3, 4, 5]
 const ROUND_OPTIONS = [5, 10, 20]
 
@@ -33,6 +34,7 @@ export default function ColorRush() {
     const [round, setRound] = useState(0)
     const [reactionTimes, setReactionTimes] = useState([])
     const roundStartRef = useRef(null)
+    const prevBestRef = useRef(null)
 
     const [rushScores, setRushScores] = useState(() => {
         const saved = localStorage.getItem('colorrush_rush_scores')
@@ -55,6 +57,7 @@ export default function ColorRush() {
     }
 
     const endGame = (reflexTimesOverride = null) => {
+        playGameOver()
         setIsPlaying(false)
         setGrid([])
         setTargetColor(null)
@@ -86,6 +89,8 @@ export default function ColorRush() {
     }
 
     const startGame = () => {
+        playStart()
+        prevBestRef.current = reflexScores[0]?.avg ?? null
         const newGrid = generateGrid(gridSize)
         setScore(0)
         setTimeLeft(timerDuration)
@@ -123,6 +128,7 @@ export default function ColorRush() {
     const handleCellClick = (color) => {
         if (!isPlaying) return
         if (color === targetColor) {
+            playCorrect()
             if (mode === 'reflex') {
                 const elapsed = Date.now() - roundStartRef.current
                 const nextTimes = [...reactionTimes, elapsed]
@@ -144,6 +150,7 @@ export default function ColorRush() {
                 setTargetColor(pickTarget(newGrid, targetColor))
             }
         } else {
+            playWrong()
             if (mode === 'reflex') {
                 endGame()
             } else {
@@ -187,6 +194,14 @@ export default function ColorRush() {
                                       </div>
                                     : <span className="game-over-score">—</span>
                                 }
+                                {avgTime !== null && (() => {
+                                    const prev = prevBestRef.current
+                                    if (prev === null) return <span className="game-over-delta game-over-delta-new">First score!</span>
+                                    const delta = avgTime - prev
+                                    if (delta < 0) return <span className="game-over-delta game-over-delta-better">↓ {Math.abs(delta)}ms faster than your best</span>
+                                    if (delta > 0) return <span className="game-over-delta game-over-delta-worse">↑ {delta}ms slower than your best</span>
+                                    return <span className="game-over-delta game-over-delta-new">Matched your best!</span>
+                                })()}
                                 <span className="game-over-rounds">{reactionTimes.length} / {totalRounds} rounds</span>
                             </>
                         ) : (
