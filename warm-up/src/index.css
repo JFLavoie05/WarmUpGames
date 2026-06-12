@@ -59,6 +59,7 @@ html:has(.quickgrid-wrapper),
 html:has(.colorrush-wrapper),
 html:has(.keyrush-wrapper),
 html:has(.chimptest-wrapper),
+html:has(.rg-wrapper),
 html:has(.comingsoon-wrapper) {
   background-image: url('/wallpaper4.jpg');
   background-size: cover;
@@ -71,6 +72,7 @@ html:has(.quickgrid-wrapper) #root,
 html:has(.colorrush-wrapper) #root,
 html:has(.keyrush-wrapper) #root,
 html:has(.chimptest-wrapper) #root,
+html:has(.rg-wrapper) #root,
 html:has(.comingsoon-wrapper) #root {
   background-color: #0d0d1a;
   border-inline-color: transparent;
