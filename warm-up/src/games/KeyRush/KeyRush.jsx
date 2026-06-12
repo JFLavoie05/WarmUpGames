@@ -38,6 +38,7 @@ export default function KeyRush() {
     const [gameOver, setGameOver]   = useState(false)
     const [timerKey, setTimerKey]   = useState(0)
     const [timerMs, setTimerMs]     = useState(DIFFICULTY.medium.timePerKey)
+    const [countdown, setCountdown] = useState(0)
     const [scores, setScores]       = useState(() => {
         const saved = localStorage.getItem('keyrush_scores')
         return saved ? JSON.parse(saved) : []
@@ -52,6 +53,7 @@ export default function KeyRush() {
     const currentIndexRef = useRef(0)
     const scoreRef        = useRef(0)
     const timeoutRef      = useRef(null)
+    const countdownRef    = useRef(null)
 
     difficultyRef.current = difficulty
     keySetRef.current     = keySet
@@ -95,8 +97,7 @@ export default function KeyRush() {
         timeoutRef.current = setTimeout(endGame, ms)
     }
 
-    const startGame = () => {
-        playStart()
+    const launchGame = () => {
         clearTimeout(timeoutRef.current)
         isPlayingRef.current = true
         const keys = KEY_SETS[keySetRef.current].keys
@@ -115,12 +116,44 @@ export default function KeyRush() {
         timeoutRef.current = setTimeout(endGame, ms)
     }
 
+    const startGame = () => {
+        clearTimeout(timeoutRef.current)
+        clearCountdown()
+        isPlayingRef.current = false
+        setIsPlaying(false)
+        setGameOver(false)
+        setScore(0)
+        scoreRef.current = 0
+        setSequence([])
+        sequenceRef.current = []
+
+        playStart()
+        setCountdown(3)
+        const t1 = setTimeout(() => setCountdown(2), 300)
+        const t2 = setTimeout(() => setCountdown(1), 600)
+        const t3 = setTimeout(() => {
+            setCountdown(0)
+            countdownRef.current = null
+            launchGame()
+        }, 900)
+        countdownRef.current = [t1, t2, t3]
+    }
+
+    const clearCountdown = () => {
+        if (countdownRef.current) {
+            countdownRef.current.forEach(clearTimeout)
+            countdownRef.current = null
+        }
+        setCountdown(0)
+    }
+
     const stopGame = () => {
         clearTimeout(timeoutRef.current)
         timeoutRef.current      = null
         isPlayingRef.current    = false
         sequenceRef.current     = []
         currentIndexRef.current = 0
+        clearCountdown()
         setIsPlaying(false)
         setGameOver(false)
         setSequence([])
@@ -131,7 +164,7 @@ export default function KeyRush() {
 
     useEffect(() => {
         const handleKey = (e) => {
-            if (e.code === 'Space' && !isPlayingRef.current) {
+            if (e.code === 'Space' && !isPlayingRef.current && !countdownRef.current) {
                 e.preventDefault()
                 startGame()
                 return
@@ -202,6 +235,12 @@ export default function KeyRush() {
                     </div>
                 ) : (
                     <>
+                        {countdown > 0 && (
+                            <div className="kr-countdown">
+                                <span key={countdown} className="kr-countdown-num">{countdown}</span>
+                            </div>
+                        )}
+
                         <div className="kr-hud">
                             <div className="kr-hud-block">
                                 <span className="kr-hud-label">Score</span>

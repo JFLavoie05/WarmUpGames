@@ -31,6 +31,13 @@ const GAMES = [
         tags: ['Memory', 'Focus', 'Sequence'],
     },
     {
+        id: 'rhythmgrid',
+        title: 'RhythmGrid',
+        description: 'Squares slide toward a highlighted cell from all sides. Click when they arrive.',
+        path: '/rhythmgrid',
+        tags: ['Rhythm', 'Reaction', 'Focus'],
+    },
+    {
         id: 'comingsoon',
         title: 'Coming Soon',
         description: 'More games will be added in the future, stay tuned !',
@@ -44,7 +51,7 @@ export default function Hub() {
     return (
         <div className="hub">
             <div className="hub-header">
-                <span className="hub-badge">· 4 Games Available ·</span>
+                <span className="hub-badge">· 5 Games Available ·</span>
                 <h1 className="hub-title">Warm Up</h1>
                 <p className="hub-subtitle">Train your reflexes and reaction speed before your next ranked game.</p>
             </div>

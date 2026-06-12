@@ -90,6 +90,14 @@ export function playStart() {
     tone(550, 0.06, 'sine', 0.18)
 }
 
+export function playTick() {
+    tone(1500, 0.022, 'sine', 0.05)
+}
+
+export function playTickTarget() {
+    tone(750, 0.09, 'triangle', 0.22)
+}
+
 export function toggleMute() {
     muted = !muted
     localStorage.setItem('warmup_muted', muted)

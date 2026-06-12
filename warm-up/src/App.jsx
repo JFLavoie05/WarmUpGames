@@ -5,6 +5,7 @@ import QuickGrid from './games/QuickGrid/QuickGrid'
 import ColorRush from './games/ColorRush/ColorRush'
 import KeyRush from './games/KeyRush/KeyRush'
 import ChimpTest from './games/ChimpTest/ChimpTest'
+import RhythmGrid from './games/RhythmGrid/RhythmGrid'
 import ComingSoon from './games/comingsoon/comingsoon'
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
         <Route path="/colorrush" element={<ColorRush />} />
         <Route path="/keyrush" element={<KeyRush />} />
         <Route path="/chimptest" element={<ChimpTest />} />
+        <Route path="/rhythmgrid" element={<RhythmGrid />} />
         <Route path="/comingsoon" element={<ComingSoon />} />
       </Routes>
     </BrowserRouter>
